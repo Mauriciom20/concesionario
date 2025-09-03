@@ -1,124 +1,88 @@
-class Vehiculos {
-    marca: string;
-    modelo: string;
-    anio: number;
+class Vehiculo {
+    constructor(public marca: string, public modelo: string, public anio: number) {}
+
+    detalles(): string {
+        return `${this.marca} ${this.modelo}, Año: ${this.anio}`;
+    }
+
+    iniciarViaje(destino: string): string {
+        return `El vehículo ${this.marca} ${this.modelo} inició un viaje hacia ${destino}.`;
+    }
 }
 
-class Coche extends Vehiculos {
-    puertas: number;
-
-    constructor(marca: string, modelo: string, anio: number, puertas: number) {
-        super();
-        this.marca = marca;
-        this.modelo = modelo;
-        this.anio = anio;
-        this.puertas = puertas;
+class Coche extends Vehiculo {
+    constructor(marca: string, modelo: string, anio: number, public puertas: number) {
+        super(marca, modelo, anio);
     }
 
-    detallesCoche(): string {
-        return `Coche: ${this.marca} ${this.modelo}, Año: ${this.anio}, Puertas: ${this.puertas}`;
+    detalles(): string {
+        return `Coche: ${super.detalles()}, Puertas: ${this.puertas}`;
     }
-
 }
 
-class Moto extends Vehiculos {
-    tipo: string;
-    sidecar: boolean = false;
-
-    constructor(marca: string, modelo: string, anio: number, tipo: string) {
-        super();
-        this.marca = marca;
-        this.modelo = modelo;
-        this.anio = anio;
-        this.tipo = tipo;
-        this.sidecar = tipo.toLowerCase() === "custom" ? true : false;
+class Moto extends Vehiculo {
+    constructor(marca: string, modelo: string, anio: number, public tipo: string, public sidecar: boolean = false) {
+        super(marca, modelo, anio);
+        this.sidecar = tipo.toLowerCase() === "custom";
     }
 
-    detallesMoto(): string {
-        return `Moto: ${this.marca} ${this.modelo}, Año: ${this.anio}, Tipo: ${this.tipo}, Sidecar: ${this.sidecar ? "Sí" : "No"}`;
+    detalles(): string {
+        return `Moto: ${super.detalles()}, Tipo: ${this.tipo}, Sidecar: ${this.sidecar ? "Sí" : "No"}`;
+    }
+}
+
+abstract class Empleado {
+    constructor(public nombre: string, public salario: number) {}
+
+    abstract calcularBono(): number;
+
+    detalles(): string {
+        return `Empleado: ${this.nombre}, Salario: $${this.salario}`;
+    }
+}
+
+class Conductor extends Empleado {
+    constructor(nombre: string, salario: number, public licencia: string) {
+        super(nombre, salario);
+    }
+
+    calcularBono(): number {
+        return this.salario * 0.10;
+    }
+
+    detalles(): string {
+        return `${super.detalles()}, Rol: Conductor, Licencia: ${this.licencia}`;
+    }
+}
+
+class Mecanico extends Empleado {
+    constructor(nombre: string, salario: number, public especialidad: string) {
+        super(nombre, salario);
+    }
+
+    calcularBono(): number {
+        return this.salario * 0.05;
+    }
+
+    detalles(): string {
+        return `${super.detalles()}, Rol: Mecánico, Especialidad: ${this.especialidad}`;
     }
 }
 
 const miCoche = new Coche("Toyota", "Corolla", 2020, 4);
-console.log(miCoche.detallesCoche());
-
 const miMoto = new Moto("Harley-Davidson", "Street 750", 2019, "Custom");
-console.log(miMoto.detallesMoto());
 
-class Viaje {
-    vehiculo: Vehiculos;
-    destino: string;
-    duracionDias: number;   
-    costo: number;
+console.log(miCoche.detalles());
+console.log(miMoto.detalles());
 
-    constructor(vehiculo: Vehiculos, destino: string, duracionDias: number, costo: number) {
-        this.vehiculo = vehiculo;
-        this.destino = destino;
-        this.duracionDias = duracionDias;
-        this.costo = costo;
-    }
+console.log(miCoche.iniciarViaje("Playa"));
+console.log(miMoto.iniciarViaje("Montaña"));
 
-    detallesViaje(): string {
-        return `Viaje a ${this.destino} por ${this.duracionDias} días en un ${this.vehiculo.marca} ${this.vehiculo.modelo}. Costo: $${this.costo}`;
-    }
-}
+const empleado1 = new Conductor("Juan Pérez", 3000, "B2");
+const empleado2 = new Mecanico("Ana Gómez", 3500, "Motores");
 
-const viajeEnCoche = new Viaje(miCoche, "Playa", 7, 500);
-console.log(viajeEnCoche.detallesViaje());
+console.log(empleado1.detalles());
+console.log(empleado2.detalles());
 
-const viajeEnMoto = new Viaje(miMoto, "Montaña", 3, 300);
-console.log(viajeEnMoto.detallesViaje());
-
-class empleado {
-    nombre: string;
-    puesto: string;
-    salario: number;
-    especialidad: string;
-
-    constructor(nombre: string, puesto: string, salario: number) {
-        this.nombre = nombre;
-        this.puesto = puesto;   
-        this.salario = salario;
-        this.especialidad = puesto === "Conductor" ? "Conducción segura" : "Mantenimiento de vehículos";
-    }
-
-    detallesEmpleado(): string {
-        return `Empleado: ${this.nombre}, Puesto: ${this.puesto}, Salario: $${this.salario}, Especialidad: ${this.especialidad}`;
-    }
-}
-
-const empleado1 = new empleado("Juan Pérez", "Conductor", 3000);
-console.log(empleado1.detallesEmpleado());
-
-const empleado2 = new empleado("Ana Gómez", "Mecánico", 3500);
-console.log(empleado2.detallesEmpleado());
-
-class Bono {
-    empleado: empleado;
-    montoSalario: number;
-    motivo: string;
-    fecha: Date;
-
-    constructor(empleado: empleado, montoSalario: number, motivo: string) {
-        this.empleado = empleado;
-        this.montoSalario = empleado.puesto === "Conductor" ? montoSalario + (montoSalario * 0.10)  : montoSalario + (montoSalario * 0.05);
-
-        this.motivo = motivo;
-        this.fecha = new Date();
-    }   
-
-    detallesBono(): string {
-        return `Bono de $${this.montoSalario} para ${this.empleado.nombre} por ${this.motivo} el ${this.fecha.toDateString()}`;
-    }   
-}
-
-const bono1 = new Bono(empleado1, 500, "Excelente desempeño");
-console.log(bono1.detallesBono());  
-
-const bono2 = new Bono(empleado2, 700, "Reparación destacada");
-console.log(bono2.detallesBono());
-
-
-
-const bono2 = new Bono(empleado2, 700, "Reparación destacada");
-console.log(bono2.detallesBono());
+console.log(`Bono de ${empleado1.nombre}: $${empleado1.calcularBono()}`);
+console.log(`Bono de ${empleado2.nombre}: $${empleado2.calcularBono()}`);
