@@ -42,3 +42,76 @@ console.log(miCoche.detallesCoche());
 
 const miMoto = new Moto("Honda", "CBR600RR", 2019, "Deportiva");
 console.log(miMoto.detallesMoto());
+
+class Viaje {
+    vehiculo: Vehiculos;
+    destino: string;
+    duracionDias: number;   
+    costo: number;
+
+    constructor(vehiculo: Vehiculos, destino: string, duracionDias: number, costo: number) {
+        this.vehiculo = vehiculo;
+        this.destino = destino;
+        this.duracionDias = duracionDias;
+        this.costo = costo;
+    }
+
+    detallesViaje(): string {
+        return `Viaje a ${this.destino} por ${this.duracionDias} días en un ${this.vehiculo.marca} ${this.vehiculo.modelo}. Costo: $${this.costo}`;
+    }
+}
+
+const viajeEnCoche = new Viaje(miCoche, "Playa", 7, 500);
+console.log(viajeEnCoche.detallesViaje());
+
+const viajeEnMoto = new Viaje(miMoto, "Montaña", 3, 300);
+console.log(viajeEnMoto.detallesViaje());
+
+class empleado {
+    nombre: string;
+    puesto: string;
+    salario: number;
+    especialidad: string;
+
+    constructor(nombre: string, puesto: string, salario: number) {
+        this.nombre = nombre;
+        this.puesto = puesto;   
+        this.salario = salario;
+        this.especialidad = puesto === "Conductor" ? "Conducción segura" : "Mantenimiento de vehículos";
+    }
+
+    detallesEmpleado(): string {
+        return `Empleado: ${this.nombre}, Puesto: ${this.puesto}, Salario: $${this.salario}, Especialidad: ${this.especialidad}`;
+    }
+}
+
+const empleado1 = new empleado("Juan Pérez", "Conductor", 3000);
+console.log(empleado1.detallesEmpleado());
+
+const empleado2 = new empleado("Ana Gómez", "Mecánico", 3500);
+console.log(empleado2.detallesEmpleado());
+
+class Bono {
+    empleado: empleado;
+    monto: number;
+    motivo: string;
+    fecha: Date;
+
+    constructor(empleado: empleado, monto: number, motivo: string) {
+        this.empleado = empleado;
+        this.monto = empleado.puesto === "Conductor" ? monto + (monto * 0.10)  : monto + (monto * 0.05);
+
+        this.motivo = motivo;
+        this.fecha = new Date();
+    }   
+
+    detallesBono(): string {
+        return `Bono de $${this.monto} para ${this.empleado.nombre} por ${this.motivo} el ${this.fecha.toDateString()}`;
+    }   
+}
+
+const bono1 = new Bono(empleado1, 500, "Excelente desempeño");
+console.log(bono1.detallesBono());  
+
+const bono2 = new Bono(empleado2, 700, "Reparación destacada");
+console.log(bono2.detallesBono());
