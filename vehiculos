@@ -1,0 +1,44 @@
+class Vehiculos {
+    marca: string;
+    modelo: string;
+    anio: number;
+}
+
+class Coche extends Vehiculos {
+    puertas: number;
+
+    constructor(marca: string, modelo: string, anio: number, puertas: number) {
+        super();
+        this.marca = marca;
+        this.modelo = modelo;
+        this.anio = anio;
+        this.puertas = puertas;
+    }
+
+    detallesCoche(): string {
+        return `Coche: ${this.marca} ${this.modelo}, Año: ${this.anio}, Puertas: ${this.puertas}`;
+    }
+
+}
+
+class Moto extends Vehiculos {
+    tipo: string;
+
+    constructor(marca: string, modelo: string, anio: number, tipo: string) {
+        super();
+        this.marca = marca;
+        this.modelo = modelo;
+        this.anio = anio;
+        this.tipo = tipo;
+    }
+
+    detallesMoto(): string {
+        return `Moto: ${this.marca} ${this.modelo}, Año: ${this.anio}, Tipo: ${this.tipo}`;
+    }
+}
+
+const miCoche = new Coche("Toyota", "Corolla", 2020, 4);
+console.log(miCoche.detallesCoche());
+
+const miMoto = new Moto("Honda", "CBR600RR", 2019, "Deportiva");
+console.log(miMoto.detallesMoto());
